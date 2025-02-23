@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站导航</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="categories">
+            <button class="category-btn active" data-category="all">全部</button>
+            <button class="category-btn" data-category="工作">工作</button>
+            <button class="category-btn" data-category="学习">学习</button>
+            <button class="category-btn" data-category="娱乐">娱乐</button>
+            <button class="category-btn" data-category="资讯">资讯</button>
+            <button class="category-btn" data-category="购物">购物</button>
+        </div>
+        <div class="search-box">
+            <select id="searchEngine">
+                <option value="baidu">百度</option>
+                <option value="google">Google</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="搜索...">
+            <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+    </nav>
+
+    <main class="card-grid"></main>
+
+    <div class="float-buttons">
+        <button class="float-btn add-btn" id="addBtn">
+            <i class="fas fa-plus"></i>
+        </button>
+        <button class="float-btn edit-btn" id="editBtn">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="float-btn delete-btn" id="deleteBtn">
+            <i class="fas fa-minus"></i>
+        </button>
+    </div>
+
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h2>添加网站</h2>
+            <form id="addForm">
+                <input type="url" id="urlInput" placeholder="输入网址" required>
+                <input type="text" id="nameInput" placeholder="网站名称" required>
+                <select id="categoryInput" required>
+                    <option value="工作">工作</option>
+                    <option value="学习">学习</option>
+                    <option value="娱乐">娱乐</option>
+                    <option value="资讯">资讯</option>
+                    <option value="购物">购物</option>
+                </select>
+                <div class="color-picker">
+                    <label>选择颜色：</label>
+                    <div class="color-grid"></div>
+                </div>
+                <div class="button-group">
+                    <button type="submit">添加</button>
+                    <button type="button" class="close-btn" onclick="document.getElementById('addModal').style.display='none'">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <h2>编辑网站</h2>
+            <form id="editForm">
+                <input type="text" id="editNameInput" placeholder="网站名称" required>
+                <select id="editCategoryInput" required>
+                    <option value="工作">工作</option>
+                    <option value="学习">学习</option>
+                    <option value="娱乐">娱乐</option>
+                    <option value="资讯">资讯</option>
+                    <option value="购物">购物</option>
+                </select>
+                <div class="color-picker">
+                    <label>选择颜色：</label>
+                    <div class="color-grid"></div>
+                </div>
+                <div class="button-group">
+                    <button type="submit">保存</button>
+                    <button type="button" class="close-btn" onclick="document.getElementById('editModal').style.display='none'">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html> 
