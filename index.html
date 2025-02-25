@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网站导航</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome.css">
 </head>
 <body>
     <nav>
@@ -24,6 +24,27 @@
             </select>
             <input type="text" id="searchInput" placeholder="搜索...">
             <button id="searchBtn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-section">
+            <div class="user-avatar" id="userAvatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="dropdown-menu" id="userDropdown">
+                <!-- 未登录时显示 -->
+                <div class="dropdown-item login-item" id="loginMenuItem">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>登录</span>
+                </div>
+                <!-- 登录后显示 -->
+                <div class="dropdown-item user-info" id="userInfoItem" style="display: none;">
+                    <i class="fas fa-user"></i>
+                    <span>个人信息</span>
+                </div>
+                <div class="dropdown-item logout-item" id="logoutItem" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>注销</span>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -89,6 +110,67 @@
             </form>
         </div>
     </div>
+
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <button type="button" class="close-btn" onclick="document.getElementById('userModal').style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="auth-container">
+                <h2>用户登录</h2>
+                <form id="loginForm" class="auth-form active">
+                    <input type="text" placeholder="用户名" required>
+                    <input type="password" placeholder="密码" required>
+                    <button type="submit" class="auth-submit">登录</button>
+                    <div class="auth-links">
+                        <a href="#" id="toRegister">注册账号</a>
+                        <span class="divider">|</span>
+                        <a href="#" id="forgotPassword">忘记密码</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button type="button" class="close-btn" onclick="document.getElementById('registerModal').style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="auth-container">
+                <h2>注册账号</h2>
+                <form id="registerForm" class="auth-form">
+                    <input type="text" placeholder="用户名" required>
+                    <input type="password" placeholder="密码" required>
+                    <input type="password" placeholder="确认密码" required>
+                    <button type="submit" class="auth-submit">注册</button>
+                    <div class="auth-links">
+                        <a href="#" id="backToLogin">返回登录</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 找回密码模态框 -->
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <button type="button" class="close-btn" onclick="document.getElementById('resetModal').style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="auth-container">
+                <h2>找回密码</h2>
+                <form id="resetForm" class="auth-form">
+                    <input type="text" placeholder="用户名" required>
+                    <button type="submit" class="auth-submit">发送重置链接</button>
+                    <div class="auth-links">
+                        <a href="#" id="backToLoginFromReset">返回登录</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="script.js"></script>
-</html> 
+</html>

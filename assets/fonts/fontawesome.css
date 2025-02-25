@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Font Awesome 5 Free';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('fa-solid-900.woff2') format('woff2');
+}
+
+.fas {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+/* 定义所有使用到的图标 */
+.fa-plus:before { content: "\f067"; }
+.fa-minus:before { content: "\f068"; }
+.fa-edit:before { content: "\f044"; }
+.fa-search:before { content: "\f002"; }
+.fa-user-circle:before { content: "\f2bd"; }
+.fa-sign-in-alt:before { content: "\f2f6"; }
+.fa-user:before { content: "\f007"; }
+.fa-sign-out-alt:before { content: "\f2f5"; }
+.fa-times:before { content: "\f00d"; }

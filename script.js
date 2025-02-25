@@ -3,7 +3,7 @@ const initialData = [
     {
         name: "GitHub",
         url: "https://github.com",
-        favicon: "https://api.iowen.cn/favicon/github.com.png", // 使用更快的服务
+        favicon: "https://github.com/favicon.ico", // 直接从目标网站获取favicon
         category: "工作",
         description: "代码托管平台",
         themeColor: "#24292e"
@@ -284,5 +284,186 @@ document.getElementById('searchBtn').addEventListener('click', () => {
     window.open(searchUrls[engine], '_blank');
 });
 
+// 用户相关变量
+let currentUser = null;
+
+// 修改用户头像点击事件
+document.getElementById('userAvatar').addEventListener('click', (e) => {
+    e.stopPropagation(); // 阻止事件冒泡
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.classList.toggle('active');
+});
+
+// 点击其他地方关闭下拉菜单
+document.addEventListener('click', () => {
+    document.getElementById('userDropdown').classList.remove('active');
+});
+
+// 下拉菜单项点击事件
+document.getElementById('loginMenuItem').addEventListener('click', () => {
+    document.getElementById('userModal').style.display = 'block';
+    document.getElementById('userDropdown').classList.remove('active');
+});
+
+document.getElementById('logoutItem').addEventListener('click', () => {
+    if (confirm('确定要注销吗？')) {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        updateUserAvatar();
+        updateDropdownMenu();
+        document.getElementById('userDropdown').classList.remove('active');
+    }
+});
+
+// 更新下拉菜单显示
+function updateDropdownMenu() {
+    const loginItem = document.getElementById('loginMenuItem');
+    const userInfoItem = document.getElementById('userInfoItem');
+    const logoutItem = document.getElementById('logoutItem');
+    
+    if (currentUser) {
+        loginItem.style.display = 'none';
+        userInfoItem.style.display = 'flex';
+        logoutItem.style.display = 'flex';
+        userInfoItem.querySelector('span').textContent = currentUser.username;
+    } else {
+        loginItem.style.display = 'flex';
+        userInfoItem.style.display = 'none';
+        logoutItem.style.display = 'none';
+    }
+}
+
+// 切换登录/注册表单
+document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        // 移除所有活动状态
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        
+        // 激活选中的表单
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + 'Form').classList.add('active');
+    });
+});
+
+// 修改模态框切换逻辑
+document.getElementById('toRegister').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('userModal').style.display = 'none';
+    document.getElementById('registerModal').style.display = 'block';
+});
+
+document.getElementById('forgotPassword').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('userModal').style.display = 'none';
+    document.getElementById('resetModal').style.display = 'block';
+});
+
+document.getElementById('backToLogin').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('registerModal').style.display = 'none';
+    document.getElementById('userModal').style.display = 'block';
+});
+
+document.getElementById('backToLoginFromReset').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('resetModal').style.display = 'none';
+    document.getElementById('userModal').style.display = 'block';
+});
+
+// 添加用户数据存储
+const users = JSON.parse(localStorage.getItem('users')) || [];
+
+// 修改注册表单处理，保存用户数据
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = e.target.elements[0].value;
+    const password = e.target.elements[1].value;
+    const confirmPassword = e.target.elements[2].value;
+    
+    if (password !== confirmPassword) {
+        alert('两次输入的密码不一致');
+        return;
+    }
+    
+    // 检查用户名是否已存在
+    if (users.some(user => user.username === username)) {
+        alert('用户名已存在');
+        return;
+    }
+    
+    try {
+        // 保存用户数据
+        users.push({ username, password });
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        alert('注册成功，请登录');
+        document.getElementById('registerModal').style.display = 'none';
+        document.getElementById('userModal').style.display = 'block';
+    } catch (error) {
+        alert('注册失败：' + error.message);
+    }
+});
+
+// 修改登录表单处理，添加验证
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = e.target.elements[0].value;
+    const password = e.target.elements[1].value;
+    
+    try {
+        // 验证用户名和密码
+        const user = users.find(u => u.username === username);
+        if (!user) {
+            alert('用户名不存在');
+            return;
+        }
+        if (user.password !== password) {
+            alert('密码错误');
+            return;
+        }
+        
+        // 登录成功
+        currentUser = { username };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        document.getElementById('userModal').style.display = 'none';
+        updateUserAvatar();
+        updateDropdownMenu();
+        alert('登录成功');
+    } catch (error) {
+        alert('登录失败：' + error.message);
+    }
+});
+
+// 修改更新头像函数
+function updateUserAvatar() {
+    const avatar = document.getElementById('userAvatar');
+    if (currentUser) {
+        // 如果用户已登录，显示用户名首字母
+        avatar.innerHTML = `<div class="user-initial">${currentUser.username[0].toUpperCase()}</div>`;
+    } else {
+        // 未登录显示默认图标
+        avatar.innerHTML = '<i class="fas fa-user-circle"></i>';
+    }
+}
+
+// 添加实时密码验证
+document.getElementById('registerForm').addEventListener('input', (e) => {
+    if (e.target.type === 'password') {
+        const form = e.target.form;
+        const password = form.elements[1].value;
+        const confirmPassword = form.elements[2].value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            form.elements[2].setCustomValidity('两次输入的密码不一致');
+        } else {
+            form.elements[2].setCustomValidity('');
+        }
+    }
+});
+
 // 初始渲染
-renderCards(); 
+renderCards();
+
+// 初始化下拉菜单状态
+updateDropdownMenu();
